@@ -40,7 +40,8 @@ async function getNewToken() {
 async function checkInbox(bearerToken) {
   var settings = {
     headers: {
-      Authorization: "bearer 345361280856-wkynmPMi4ywaARXulxaSjziC9Vw"
+      Authorization: "bearer " + bearerToken,
+      "User-Agent": "ReelyTho (by /u/ReelyTho)"
     },
     async: true,
     crossDomain: true,
@@ -52,5 +53,35 @@ async function checkInbox(bearerToken) {
     await request(settings).catch(error => console.log(error))
   );
 
-  return response.data;
+  return response.data.children;
 }
+
+async function replyToMessage(bearerToken, messageName, replyBody) {
+  var settings = {
+    headers: {
+      Authorization: "bearer " + bearerToken,
+      "User-Agent": "ReelyTho (by /u/ReelyTho)"
+    },
+    form: {
+      parent: messageName,
+      text: replyBody
+    },
+    async: true,
+    crossDomain: true,
+    url: "https://oauth.reddit.com/message/unread",
+    method: "GET"
+  };
+
+  const response = JSON.parse(
+    await request(settings).catch(error => console.log(error))
+  );
+
+  return "nice";
+}
+
+module.exports = {
+  getNewToken: getNewToken,
+  checkInbox: checkInbox,
+  replyToMessage,
+  replyToMessage
+};

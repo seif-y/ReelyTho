@@ -24,7 +24,7 @@ async function getMovie(title) {
   };
 
   const searchResults = JSON.parse(
-    await request(settings).catch(error => error)
+    await request(settings).catch(error => console.log(error))
   );
 
   const movie = searchResults.results[0];
@@ -34,3 +34,7 @@ async function getMovie(title) {
     title: movie.original_title
   };
 }
+
+module.exports = {
+  getMovie: getMovie
+};

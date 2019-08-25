@@ -8,12 +8,19 @@
  */
 
 const express = require("express");
-const app = express();
-const port = process.env.PORT || 3000;
+const path = require("path");
 
 const movies = require("./movies.js");
+const reddit = require("./reddit.js");
+const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => res.status(200).send("Hello World"));
+const app = express();
+
+app.use("/static", express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) =>
+  res.status(200).sendFile(path.join(__dirname, "index.html"))
+);
 
 app.get("/movie", async (req, res) => {
   movies
