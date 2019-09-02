@@ -6,7 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="/static/index.js"></script>
+    <script src="/static/homepage.js"></script>
     <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -16,35 +16,39 @@
   </head>
   <body
     class="text-center"
-    style="display: flex; align-items: center; padding-top: 10%; background: #ff6600;"
+    style="display: flex; align-items: center; padding-top: 10%; background: #ff8533;"
   >
     <form
       class="form"
+      id="movieForm"
       style="width: 100%; max-width: 25%; padding: 15px; margin: auto;"
     >
       <img
         class="mb-4"
-        src="https://ak6.picdn.net/shutterstock/videos/766606/thumb/1.jpg"
+        src="/static/images/ReelyTho.png"
+        alt="ReelyTho"
         style="width: 100%;"
       />
-      <h1 class="h3 mb-3 font-weight-bold ">Search for a movie</h1>
+      <!-- <h1 class="h3 mb-3 font-weight-bold ">Search for a movie</h1> -->
       <label for="inputFilm" class="sr-only">Enter the title of a movie</label>
       <input
         type="text"
         id="inputFilm"
         class="form-control"
-        placeholder="eg. Inception"
+        placeholder="Search for a movie"
         style="padding-top: 5px;"
         required
         autofocus
       />
       <button
-        class="btn btn-lg btn-dark btn-block"
+        class="btn btn-md btn-dark btn-block"
         type="submit"
         style="margin-top: 5px"
       >
         Search
       </button>
+      <p id="errorMsg">hook</p>
     </form>
+    <h1 id="results">Suck my nutsack</h1>
   </body>
 </html>

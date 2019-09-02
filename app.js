@@ -19,14 +19,14 @@ const app = express();
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) =>
-  res.status(200).sendFile(path.join(__dirname, "index.html"))
+  res.status(200).sendFile(path.join(__dirname, "homepage.html"))
 );
 
 app.get("/movie", async (req, res) => {
   movies
     .getMovie(req.query.title)
     .then(movie => res.status(200).send(movie))
-    .catch(error => res.status(400).send("Whatchu doin bruh"));
+    .catch(error => res.status(400).send("Bad Request"));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

@@ -23,16 +23,21 @@ async function getMovie(title) {
     method: "GET"
   };
 
-  const searchResults = JSON.parse(
-    await request(settings).catch(error => console.log(error))
+  var searchResults = JSON.parse(
+    await request(settings)
+      .then(response => response)
+      .catch(error => console.log(error))
   );
 
-  const movie = searchResults.results[0];
-
-  return {
-    id: movie.id,
-    title: movie.original_title
-  };
+  if (searchResults.results.length > 0) {
+    const movie = searchResults.results[0];
+    return {
+      id: movie.id,
+      title: movie.original_title
+    };
+  } else {
+    return null;
+  }
 }
 
 module.exports = {
