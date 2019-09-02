@@ -34,16 +34,12 @@ if (
   });
 }
 
-async function analyseText(review, movieName) {
+async function analyseText(review) {
   const params = {
     text: review,
     features: {
-      sentiment: {
-        targets: [movieName]
-      },
-      emotion: {
-        targets: [movieName]
-      },
+      sentiment: {},
+      emotion: {},
       keywords: {
         limit: 5
       }

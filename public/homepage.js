@@ -4,14 +4,11 @@ $(document).ready(function() {
   var error = $("#errorMsg");
   var results = $("#results");
 
-  console.log("Started");
-
   results.hide();
   error.hide();
 
   form.submit(function(event) {
     event.preventDefault();
-    console.log(input.val());
     doSearch(input.val());
   });
 
@@ -22,17 +19,35 @@ $(document).ready(function() {
       url: "/movie",
       data: { title: searchTerm },
       success: movie => {
-        console.log(movie);
         if (movie === "") {
-          console.log("not found");
-          results.text("Movie " + input.val() + "not found");
+          error.text("Movie " + input.val() + "not found");
+          error.show();
         } else {
-          console.log(movie.title);
-          results.text(movie.title);
+          $("#movieName").text(movie.title);
+          analyseMovie(movie);
+          form.hide();
+          results.show();
         }
-        form.hide();
-        results.show();
       }
     });
+  }
+
+  function analyseMovie(movie) {
+    newRow("General Sentiment", 27);
+    newRow("Key Word 1", 70);
+    newRow("Key Word 2", 56);
+    newRow("Key Word 3", 12);
+  }
+
+  function newRow(title, percentage) {
+    results.append(
+      '<div class="row"><div class="col-3">' +
+        title +
+        '</div><div class="col-9"><div class="progress"><div class="progress-bar bg-dark" role="progressbar" style=" width: ' +
+        percentage +
+        '%">' +
+        percentage +
+        "</div></div></div></div>"
+    );
   }
 });
