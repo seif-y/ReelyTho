@@ -25,9 +25,12 @@ $(document).ready(function() {
       url: "/movie",
       data: { title: searchTerm },
       success: movie => {
-        console.log("movie", movie);
-        resultObject.movie = movie;
-        getReviewsFor(movie);
+        if (movie === "") {
+          $("#errorMsg").val("Are you sure " + searchTerm + " is a movie?");
+        } else {
+          resultObject.movie = movie;
+          getReviewsFor(movie);
+        }
       }
     });
   }
@@ -39,9 +42,8 @@ $(document).ready(function() {
       url: "/reviews",
       data: { movieID: movie.id },
       success: reviews => {
-        console.log("reviews", reviews);
         resultObject.reviews = reviews;
-        buildTable();
+        analyseReviews(reviews.allReviews);
       }
     });
   }
@@ -49,7 +51,15 @@ $(document).ready(function() {
   function analyseReviews(reviews) {
     $.ajax({
       async: "true",
-      method: "GET"
+      method: "POST",
+      url: "/analysis",
+      data: { text: reviews },
+      cache: true,
+      success: analysis => {
+        console.log(analysis);
+        resultObject.analysis = analysis;
+        buildTable();
+      }
     });
   }
 
@@ -60,10 +70,13 @@ $(document).ready(function() {
         resultObject.reviews.numReviews +
         " reviews found"
     );
-    newRow("General Sentiment", 27);
-    newRow("Key Word 1", 70);
-    newRow("Key Word 2", 56);
-    newRow("Key Word 3", 12);
+    newRow(
+      "General Sentiment",
+      resultObject.analysis.sentiment.document.score * 100
+    );
+    for (keyword of resultObject.analysis.keywords) {
+      newRow(keyword.text, keyword.sentiment.score * 100);
+    }
 
     $("#movieForm").hide();
     $("#results").show();

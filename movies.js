@@ -60,7 +60,7 @@ async function getReviews(movieID) {
   if (numReviews > 0) {
     var allReviews = "";
     for (result of searchResults.results) {
-      allReviews = allReviews.concat("\n\n" + result.content);
+      allReviews = allReviews.concat("\n" + result.content);
     }
     return { numReviews, allReviews };
   }

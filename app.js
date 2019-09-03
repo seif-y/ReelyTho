@@ -8,6 +8,7 @@
  */
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const path = require("path");
 
 const movies = require("./movies.js");
@@ -18,6 +19,8 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 app.use("/static", express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", (req, res) =>
   res.status(200).sendFile(path.join(__dirname, "homepage.html"))
@@ -37,11 +40,12 @@ app.get("/reviews", async (req, res) => {
     .catch(error => res.status(400).send("Bad Request"));
 });
 
-app.get("/analysis", async (req, res) => {
+app.post("/analysis", async (req, res) => {
+  console.log("I got a request");
   watson
-    .analyseText(req.query.text)
+    .analyseText(req.body.text)
     .then(analysis => res.status(200).send(analysis))
-    .catch(error => res.status(400).send("Bad Request"));
+    .catch(error => res.status(400).send(error));
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
