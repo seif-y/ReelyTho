@@ -35,11 +35,38 @@ async function getMovie(title) {
       id: movie.id,
       title: movie.original_title
     };
-  } else {
-    return null;
+  }
+}
+
+async function getReviews(movieID) {
+  var settings = {
+    qs: {
+      language: "en",
+      api_key: KEY
+    },
+    async: true,
+    crossDomain: true,
+    url: "https://api.themoviedb.org/3/movie/" + movieID + "/reviews",
+    method: "GET"
+  };
+
+  var searchResults = JSON.parse(
+    await request(settings)
+      .then(response => response)
+      .catch(error => console.log(error))
+  );
+
+  var numReviews = searchResults.results.length;
+  if (numReviews > 0) {
+    var allReviews = "";
+    for (result of searchResults.results) {
+      allReviews = allReviews.concat("\n\n" + result.content);
+    }
+    return { numReviews, allReviews };
   }
 }
 
 module.exports = {
-  getMovie: getMovie
+  getMovie: getMovie,
+  getReviews: getReviews
 };
