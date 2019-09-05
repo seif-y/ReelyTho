@@ -26,7 +26,7 @@ async function getMovie(title) {
   var searchResults = JSON.parse(
     await request(settings)
       .then(response => response)
-      .catch(error => console.log(error))
+      .catch(error => console.log("Could not find movie"))
   );
 
   if (searchResults.results.length > 0) {
@@ -53,7 +53,7 @@ async function getReviews(movieID) {
   var searchResults = JSON.parse(
     await request(settings)
       .then(response => response)
-      .catch(error => console.log(error))
+      .catch(error => console.log("Could not get reviews"))
   );
 
   var numReviews = searchResults.results.length;

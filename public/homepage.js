@@ -8,13 +8,16 @@ $(document).ready(function() {
   var form = $("#movieForm");
   var input = $("#inputFilm");
   var error = $("#errorMsg");
+  var loading = $("#loading");
   var results = $("#results");
 
+  loading.hide();
   results.hide();
-  error.hide();
 
   form.submit(async function(event) {
     event.preventDefault();
+    error.hide();
+    loading.show();
     searchForMovie(input.val());
   });
 
@@ -26,7 +29,7 @@ $(document).ready(function() {
       data: { title: searchTerm },
       success: movie => {
         if (movie === "") {
-          $("#errorMsg").val("Are you sure " + searchTerm + " is a movie?");
+          failedSearch('Are you sure "' + searchTerm + '" is a movie?');
         } else {
           resultObject.movie = movie;
           getReviewsFor(movie);
@@ -42,8 +45,13 @@ $(document).ready(function() {
       url: "/reviews",
       data: { movieID: movie.id },
       success: reviews => {
-        resultObject.reviews = reviews;
-        analyseReviews(reviews.allReviews);
+        if (reviews === "") {
+          failedSearch("No reviews were found for " + movie.title);
+        } else {
+          console.log("Reviews", reviews);
+          resultObject.reviews = reviews;
+          analyseReviews(reviews.allReviews);
+        }
       }
     });
   }
@@ -56,7 +64,6 @@ $(document).ready(function() {
       data: { text: reviews },
       cache: true,
       success: analysis => {
-        console.log(analysis);
         resultObject.analysis = analysis;
         buildTable();
       }
@@ -88,6 +95,8 @@ $(document).ready(function() {
     newRowMetric("joy", toPercentage(emotion.joy));
     newRowMetric("sadness", toPercentage(emotion.sadness));
 
+    newRowTitle("");
+
     $("#movieForm").hide();
     $("#results").show();
   }
@@ -114,5 +123,11 @@ $(document).ready(function() {
 
   function toPercentage(score) {
     return Math.round(((score + 1) / 2) * 100);
+  }
+
+  function failedSearch(message) {
+    loading.hide();
+    error.text(message);
+    error.show();
   }
 });

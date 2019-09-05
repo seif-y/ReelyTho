@@ -37,7 +37,7 @@ app.get("/reviews", async (req, res) => {
   movies
     .getReviews(req.query.movieID)
     .then(reviews => res.status(200).send(reviews))
-    .catch(error => res.status(400).send("Bad Request"));
+    .catch(error => res.status(400).send("Bad request"));
 });
 
 app.post("/analysis", async (req, res) => {
