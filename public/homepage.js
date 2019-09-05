@@ -68,29 +68,51 @@ $(document).ready(function() {
       resultObject.movie.title +
         " - " +
         resultObject.reviews.numReviews +
-        " reviews found"
+        " Review(s) Found"
     );
-    newRow(
+    newRowMetric(
       "General Sentiment",
-      resultObject.analysis.sentiment.document.score * 100
+      toPercentage(resultObject.analysis.sentiment.document.score)
     );
+
+    newRowTitle("Key Words From Reviews");
     for (keyword of resultObject.analysis.keywords) {
-      newRow(keyword.text, keyword.sentiment.score * 100);
+      newRowMetric(keyword.text, toPercentage(keyword.sentiment.score));
     }
+
+    newRowTitle("Emotions Conveyed by Reviews");
+    var emotion = resultObject.analysis.emotion.document.emotion;
+    newRowMetric("anger", toPercentage(emotion.anger));
+    newRowMetric("disgust", toPercentage(emotion.disgust));
+    newRowMetric("fear", toPercentage(emotion.fear));
+    newRowMetric("joy", toPercentage(emotion.joy));
+    newRowMetric("sadness", toPercentage(emotion.sadness));
 
     $("#movieForm").hide();
     $("#results").show();
   }
 
-  function newRow(title, percentage) {
+  function newRowMetric(title, percentage) {
     $("#results").append(
-      '<div class="row"><div class="col-3">' +
-        title +
+      '<div class="row" style="margin-top: 20px;"><div class="col-3">' +
+        title.toUpperCase() +
         '</div><div class="col-9"><div class="progress"><div class="progress-bar bg-dark" role="progressbar" style=" width: ' +
         percentage +
         '%">' +
         percentage +
         "</div></div></div></div>"
     );
+  }
+
+  function newRowTitle(title) {
+    $("#results").append(
+      '<div class="row" style="margin-top: 50px;"><div class="col" style="text-align: left;"><h1>' +
+        title +
+        "</h1></div></div>"
+    );
+  }
+
+  function toPercentage(score) {
+    return Math.round(((score + 1) / 2) * 100);
   }
 });

@@ -35,7 +35,6 @@ if (
 }
 
 async function analyseText(text) {
-  console.log("request made to watson");
   const params = {
     text: text,
     features: {
@@ -48,14 +47,10 @@ async function analyseText(text) {
     }
   };
 
-  console.log("paramters set for watson request");
-
   var results = await nlu
     .analyze(params)
     .then(response => response)
-    .catch(error => console.log("yikes", error));
-
-  console.log("response received from watson");
+    .catch(error => console.log("Error", error));
 
   return results;
 }

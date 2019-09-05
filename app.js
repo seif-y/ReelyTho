@@ -41,7 +41,6 @@ app.get("/reviews", async (req, res) => {
 });
 
 app.post("/analysis", async (req, res) => {
-  console.log("I got a request");
   watson
     .analyseText(req.body.text)
     .then(analysis => res.status(200).send(analysis))
