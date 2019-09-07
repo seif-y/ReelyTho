@@ -12,7 +12,6 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 const movies = require("./movies.js");
-const reddit = require("./reddit.js");
 const watson = require("./text-analysis.js");
 const port = process.env.PORT || 3000;
 
@@ -47,4 +46,4 @@ app.post("/analysis", async (req, res) => {
     .catch(error => res.status(400).send(error));
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log("App listening on port " + port));
