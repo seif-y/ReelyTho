@@ -10,6 +10,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
+const cors = require("cors");
 
 const movies = require("./movies.js");
 const watson = require("./text-analysis.js");
@@ -21,25 +22,30 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+var corsOptions = {
+  origin: port,
+  optionsSuccessStatus: 200
+};
+
 app.get("/", (req, res) =>
   res.status(200).sendFile(path.join(__dirname, "homepage.html"))
 );
 
-app.get("/movie", async (req, res) => {
+app.get("/movie", cors(corsOptions), async (req, res) => {
   movies
     .getMovie(req.query.title)
     .then(movie => res.status(200).send(movie))
     .catch(error => res.status(400).send("Bad Request"));
 });
 
-app.get("/reviews", async (req, res) => {
+app.get("/reviews", cors(corsOptions), async (req, res) => {
   movies
     .getReviews(req.query.movieID)
     .then(reviews => res.status(200).send(reviews))
     .catch(error => res.status(400).send("Bad request"));
 });
 
-app.post("/analysis", async (req, res) => {
+app.post("/analysis", cors(corsOptions), async (req, res) => {
   watson
     .analyseText(req.body.text)
     .then(analysis => res.status(200).send(analysis))
